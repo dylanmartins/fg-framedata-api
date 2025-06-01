@@ -7,6 +7,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN mvn clean package -DskipTests
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
 
-CMD ["java", "-jar", "target/fg-framedata-api-0.0.1-SNAPSHOT.jar"]
+EXPOSE 8080
+CMD ["java", "-jar", "target/framedata-api-0.0.1-SNAPSHOT.jar"]

@@ -1,34 +1,27 @@
+version: '3.8'
+
 services:
-  db:
+  sf6-db:
     image: postgres:15
-    container_name: sf6-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: framedata
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - fg-framedata-api_pgdata:/var/lib/postgresql/data
     networks:
       - sf6-network
 
-  app:
+  sf6-api:
     build: .
-    container_name: sf6-api
     ports:
       - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/framedata
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
-      - db
+      - sf6-db
     networks:
       - sf6-network
-
-volumes:
-  pgdata:
 
 networks:
   sf6-network:
+
+volumes:
+  fg-framedata-api_pgdata:
