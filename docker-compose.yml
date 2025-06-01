@@ -1,37 +1,34 @@
-version: '3.8'
-
 services:
-  sf6-api:
-    build: .
-    ports:
-      - "8080:8080"
+  db:
+    image: postgres:15
+    container_name: sf6-db
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sf6framedata
-      - SPRING_DATASOURCE_USERNAME=sf6user
-      - SPRING_DATASOURCE_PASSWORD=framedata123
-    depends_on:
-      - postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: framedata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - sf6-network
 
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=sf6framedata
-      - POSTGRES_USER=sf6user
-      - POSTGRES_PASSWORD=framedata123
+  app:
+    build: .
+    container_name: sf6-api
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/framedata
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - db
     networks:
       - sf6-network
 
 volumes:
-  postgres_data:
+  pgdata:
 
 networks:
   sf6-network:
-    driver: bridge
