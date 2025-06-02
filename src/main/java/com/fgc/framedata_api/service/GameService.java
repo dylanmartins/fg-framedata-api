@@ -33,7 +33,10 @@ public class GameService {
     }
 
     public Optional<GameDTO> getGameById(Long id) {
-        return gameRepository.findById(id).map(this::mapToDTO);
+        Game existingGame = gameRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
+
+        return gameRepository.findById(existingGame.getId()).map(this::mapToDTO);
     }
 
     public GameDTO updateGame(Long id, GameDTO gameDTO) {
@@ -48,7 +51,9 @@ public class GameService {
     }
 
     public void deleteGame(Long id) {
-        gameRepository.deleteById(id);
+        Game existingGame = gameRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
+        gameRepository.deleteById(existingGame.getId());
     }
 
     private GameDTO mapToDTO(Game game) {
