@@ -2,6 +2,7 @@ package com.fgc.framedata_api.controller;
 
 import com.fgc.framedata_api.model.Game;
 import com.fgc.framedata_api.model.GameDTO;
+import com.fgc.framedata_api.model.GamesResponseDTO;
 import com.fgc.framedata_api.repository.CharacterRepository;
 import com.fgc.framedata_api.repository.GameRepository;
 import com.fgc.framedata_api.service.GameService;
@@ -22,8 +23,9 @@ public class GameController {
     }
 
     @GetMapping
-    public List<GameDTO> getAllGames() {
-        return gameService.getAllGames();
+    public GamesResponseDTO getAllGames() {
+        List<GameDTO> gameDTOs = gameService.getAllGames();
+        return new GamesResponseDTO(gameDTOs);
     }
 
     @PostMapping

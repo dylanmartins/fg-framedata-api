@@ -53,6 +53,7 @@ public class GameService {
 
     private GameDTO mapToDTO(Game game) {
         GameDTO dto = new GameDTO();
+        dto.setId(game.getId());
         dto.setName(game.getName());
         dto.setCharacters(Collections.emptyList());
         return dto;

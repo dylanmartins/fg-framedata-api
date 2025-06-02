@@ -1,6 +1,9 @@
 package com.fgc.framedata_api.service;
 
 import com.fgc.framedata_api.model.Character;
+import com.fgc.framedata_api.model.CharacterDTO;
+import com.fgc.framedata_api.model.Game;
+import com.fgc.framedata_api.model.GameDTO;
 import com.fgc.framedata_api.repository.CharacterRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,31 +19,44 @@ public class CharacterService {
         this.characterRepository = characterRepository;
     }
 
-    public Character addCharacter(Character character) {
-        return characterRepository.save(character);
+    public CharacterDTO addCharacter(CharacterDTO characterDTO) {
+        Character character = new Character();
+        Game game = new Game();
+        game.setName(characterDTO.getGame().getName());
+        character.setGame(game);
+        character.setName(characterDTO.getName());
+        character = characterRepository.save(character);
+        return mapToDTO(character);
     }
 
-    public List<Character> getAllCharacters() {
-        return characterRepository.findAll();
+    public List<CharacterDTO> getAllCharacters() {
+        return characterRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
-    public Optional<Character> getCharacterById(Long id) {
-        return characterRepository.findById(id);
+    public Optional<CharacterDTO> getCharacterById(Long id) {
+        return characterRepository.findById(id).map(this::mapToDTO);
     }
 
-    public Optional<Character> updateCharacter(Long id, Character updatedCharacter) {
-        return characterRepository.findById(id).map(existingChar -> {
-            if (updatedCharacter.getGame() != null || !updatedCharacter.getGame().equals("")) {
-                existingChar.setGame(updatedCharacter.getGame());
-            };
-            if (updatedCharacter.getName() != null || !updatedCharacter.getName().equals("")) {
-                existingChar.setName(updatedCharacter.getName());
-            };
-           return characterRepository.save(existingChar);
+    public Optional<CharacterDTO> updateCharacter(Long id, CharacterDTO characterDTO) {
+        return characterRepository.findById(id).map(existingGame -> {
+            if (characterDTO.getName() != null && !characterDTO.getName().isEmpty()) {
+                existingGame.setName(characterDTO.getName());
+            }
+            Character updated = characterRepository.save(existingGame);
+            return mapToDTO(updated);
         });
     }
 
     public void deleteCharacter(Long id) {
         characterRepository.deleteById(id);
+    }
+
+    private CharacterDTO mapToDTO(Character character) {
+        CharacterDTO dto = new CharacterDTO();
+        dto.setName(character.getName());
+        dto.setGame(new GameDTO(character.getGame().getName()));
+        return dto;
     }
 }
