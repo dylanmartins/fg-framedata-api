@@ -55,8 +55,15 @@ public class CharacterService {
 
     private CharacterDTO mapToDTO(Character character) {
         CharacterDTO dto = new CharacterDTO();
+        GameDTO gameDTO = new GameDTO(
+                character.getGame().getId(),
+                character.getGame().getName(),
+                null,
+                character.getGame().getCreatedAt(),
+                character.getGame().getUpdatedAt()
+        );
         dto.setName(character.getName());
-        dto.setGame(new GameDTO(character.getGame().getName()));
+        dto.setGame(gameDTO);
         return dto;
     }
 }

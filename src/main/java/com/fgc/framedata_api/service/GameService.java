@@ -3,12 +3,11 @@ package com.fgc.framedata_api.service;
 import com.fgc.framedata_api.model.Game;
 import com.fgc.framedata_api.model.GameDTO;
 import com.fgc.framedata_api.repository.GameRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GameService {
@@ -37,14 +36,15 @@ public class GameService {
         return gameRepository.findById(id).map(this::mapToDTO);
     }
 
-    public Optional<GameDTO> updateGame(Long id, GameDTO gameDTO) {
-        return gameRepository.findById(id).map(existingGame -> {
-            if (gameDTO.getName() != null && !gameDTO.getName().isEmpty()) {
-                existingGame.setName(gameDTO.getName());
-            }
-            Game updated = gameRepository.save(existingGame);
-            return mapToDTO(updated);
-        });
+    public GameDTO updateGame(Long id, GameDTO gameDTO) {
+        Game existingGame = gameRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
+
+        if (gameDTO.getName() != null && !gameDTO.getName().isEmpty()) {
+            existingGame.setName(gameDTO.getName());
+        }
+        Game updated = gameRepository.save(existingGame);
+        return mapToDTO(updated);
     }
 
     public void deleteGame(Long id) {
@@ -52,10 +52,12 @@ public class GameService {
     }
 
     private GameDTO mapToDTO(Game game) {
-        GameDTO dto = new GameDTO();
-        dto.setId(game.getId());
-        dto.setName(game.getName());
-        dto.setCharacters(Collections.emptyList());
-        return dto;
+        return new GameDTO(
+                game.getId(),
+                game.getName(),
+                new ArrayList<>(),
+                game.getCreatedAt(),
+                game.getUpdatedAt()
+        );
     }
 }

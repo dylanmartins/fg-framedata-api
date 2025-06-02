@@ -34,9 +34,8 @@ public class GameController {
     }
 
     @PutMapping("/{id}")
-    public GameDTO updateGame(@PathVariable Long id, @RequestBody GameDTO updatedGame) {
-        return gameService.updateGame(id, updatedGame)
-                .orElseThrow(() -> new RuntimeException("Game not found with id: " + id));
+    public GameDTO updateGame(@PathVariable Long id, @RequestBody GameDTO gameDTO) {
+        return gameService.updateGame(id, gameDTO);
     }
 
     @DeleteMapping("/{id}")
