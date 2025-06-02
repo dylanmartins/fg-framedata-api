@@ -2,8 +2,11 @@ package com.fgc.framedata_api.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-public class Character {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,9 +15,8 @@ public class Character {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
-    private Game game;
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<Character> characters = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -32,11 +34,11 @@ public class Character {
         this.name = name;
     }
 
-    public Game getGame() {
-        return game;
+    public List<Character> getCharacters() {
+        return characters;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setCharacters(List<Character> characters) {
+        this.characters = characters;
     }
 }
