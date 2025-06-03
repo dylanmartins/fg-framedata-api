@@ -1,5 +1,12 @@
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/FramedataApiApplication.java
+/Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/controller/GameController.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/controller/HelloController.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/model/Character.java
+/Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/model/CharacterDTO.java
+/Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/model/Game.java
+/Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/model/GameDTO.java
+/Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/model/GamesResponseDTO.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/repository/CharacterRepository.java
+/Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/repository/GameRepository.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/service/CharacterService.java
+/Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/service/GameService.java
