@@ -1,11 +1,10 @@
 package com.fgc.framedata_api.controller;
 
-import com.fgc.framedata_api.model.Game;
 import com.fgc.framedata_api.model.GameDTO;
 import com.fgc.framedata_api.model.GamesResponseDTO;
-import com.fgc.framedata_api.repository.CharacterRepository;
 import com.fgc.framedata_api.repository.GameRepository;
 import com.fgc.framedata_api.service.GameService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,8 +28,9 @@ public class GameController {
     }
 
     @PostMapping
-    public GameDTO addGame(@RequestBody GameDTO gameDTO) {
-        return gameService.addGame(gameDTO);
+    public ResponseEntity<GameDTO> addGame(@RequestBody GameDTO gameDTO) {
+        GameDTO createdGame = gameService.addGame(gameDTO);
+        return ResponseEntity.status(201).body(createdGame);
     }
 
     @PutMapping("/{id}")
@@ -39,8 +39,9 @@ public class GameController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteGame(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
         gameService.deleteGame(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
