@@ -3,6 +3,7 @@ package com.fgc.framedata_api.service;
 import com.fgc.framedata_api.model.Game;
 import com.fgc.framedata_api.model.GameDTO;
 import com.fgc.framedata_api.repository.GameRepository;
+import com.fgc.framedata_api.utils.CustomExceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -32,16 +33,15 @@ public class GameService {
                 .toList();
     }
 
-    public Optional<GameDTO> getGameById(Long id) {
+    public GameDTO getGameById(Long id) {
         Game existingGame = gameRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
-
-        return gameRepository.findById(existingGame.getId()).map(this::mapToDTO);
+                .orElseThrow(() -> new CustomExceptions.GameNotFoundException("Game not found with id: " + id));
+        return mapToDTO(existingGame);
     }
 
     public GameDTO updateGame(Long id, GameDTO gameDTO) {
         Game existingGame = gameRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
+                .orElseThrow(() -> new CustomExceptions.GameNotFoundException("Game not found with id: " + id));
 
         if (gameDTO.getName() != null && !gameDTO.getName().isEmpty()) {
             existingGame.setName(gameDTO.getName());
@@ -52,7 +52,7 @@ public class GameService {
 
     public void deleteGame(Long id) {
         Game existingGame = gameRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found"));
+                .orElseThrow(() -> new CustomExceptions.GameNotFoundException("Game not found with id: " + id));
         gameRepository.deleteById(existingGame.getId());
     }
 
