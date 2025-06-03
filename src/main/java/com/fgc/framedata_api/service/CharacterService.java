@@ -22,6 +22,7 @@ public class CharacterService {
     public CharacterDTO addCharacter(CharacterDTO characterDTO) {
         Character character = new Character();
         Game game = new Game();
+        // TODO: Fetch the game from the database using the ID from characterDTO
         game.setName(characterDTO.getGame().getName());
         character.setGame(game);
         character.setName(characterDTO.getName());
