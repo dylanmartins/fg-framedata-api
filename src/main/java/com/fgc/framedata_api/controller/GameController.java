@@ -16,11 +16,9 @@ import java.util.List;
 @RequestMapping(path = {"/games", "/games/"})
 public class GameController {
 
-    private final GameRepository gameRepository;
     private final GameService gameService;
 
     public GameController(GameRepository gameRepository, GameService gameService) {
-        this.gameRepository = gameRepository;
         this.gameService = gameService;
     }
 

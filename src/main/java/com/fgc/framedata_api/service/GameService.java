@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 
 @Service
-public class GameService {
+public class GameService implements GameServiceInterface {
 
     private final GameRepository gameRepository;
 
