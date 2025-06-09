@@ -28,7 +28,7 @@ public class GameControllerIntegrationTest {
         // Create a game
         mockMvc.perform(post("/games/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Test Game\", \"releaseDate\": \"2023-01-01\", \"developer\": \"Test Developer\", \"publisher\": \"Test Publisher\"}"))
+                .content("{\"name\": \"Test Game\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name").value("Test Game"));
@@ -45,7 +45,7 @@ public class GameControllerIntegrationTest {
         // Create a game
         String response = mockMvc.perform(post("/games/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Test Game\", \"releaseDate\": \"2023-01-01\", \"developer\": \"Test Developer\", \"publisher\": \"Test Publisher\"}"))
+                .content("{\"name\": \"Test Game\"}"))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
@@ -64,7 +64,7 @@ public class GameControllerIntegrationTest {
         // Create a game
         String response = mockMvc.perform(post("/games/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Test Game\", \"releaseDate\": \"2023-01-01\", \"developer\": \"Test Developer\", \"publisher\": \"Test Publisher\"}"))
+                .content("{\"name\": \"Test Game\"}"))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
@@ -89,7 +89,7 @@ public class GameControllerIntegrationTest {
         // Create a game
         String response = mockMvc.perform(post("/games/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"Test Game\", \"releaseDate\": \"2023-01-01\", \"developer\": \"Test Developer\", \"publisher\": \"Test Publisher\"}"))
+                .content("{\"name\": \"Test Game\"}"))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
