@@ -5,27 +5,33 @@ import com.fgc.framedata_api.dto.CharacterDTO;
 import com.fgc.framedata_api.model.Game;
 import com.fgc.framedata_api.dto.GameDTO;
 import com.fgc.framedata_api.repository.CharacterRepository;
+import com.fgc.framedata_api.repository.GameRepository;
+import com.fgc.framedata_api.request.CreateCharacterRequest;
+import com.fgc.framedata_api.utils.CustomExceptions;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CharacterService {
+public class CharacterService implements CharacterServiceInterface {
 
     private final CharacterRepository characterRepository;
+    private final GameRepository gameRepository;
 
-    public CharacterService(CharacterRepository characterRepository) {
+    public CharacterService(CharacterRepository characterRepository, GameRepository gameRepository) {
         this.characterRepository = characterRepository;
+        this.gameRepository = gameRepository;
     }
 
-    public CharacterDTO addCharacter(CharacterDTO characterDTO) {
+    public CharacterDTO addCharacter(CreateCharacterRequest createCharacterRequest) {
+        Long gameId = createCharacterRequest.getGameId();
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new CustomExceptions.GameNotFoundException("Game not found with id: " + gameId));
+
         Character character = new Character();
-        Game game = new Game();
-        // TODO: Fetch the game from the database using the ID from characterDTO
-        game.setName(characterDTO.getGame().getName());
         character.setGame(game);
-        character.setName(characterDTO.getName());
+        character.setName(createCharacterRequest.getName());
         character = characterRepository.save(character);
         return mapToDTO(character);
     }
