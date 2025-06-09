@@ -1,9 +1,9 @@
 package com.fgc.framedata_api.service;
 
 import com.fgc.framedata_api.model.Character;
-import com.fgc.framedata_api.model.CharacterDTO;
+import com.fgc.framedata_api.dto.CharacterDTO;
 import com.fgc.framedata_api.model.Game;
-import com.fgc.framedata_api.model.GameDTO;
+import com.fgc.framedata_api.dto.GameDTO;
 import com.fgc.framedata_api.repository.CharacterRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.fgc.framedata_api.model;
+package com.fgc.framedata_api.dto;
 
 public class CharacterDTO {
 

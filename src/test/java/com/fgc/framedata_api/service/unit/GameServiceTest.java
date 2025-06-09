@@ -1,15 +1,17 @@
 package com.fgc.framedata_api.service.unit;
 
 import com.fgc.framedata_api.model.Game;
-import com.fgc.framedata_api.model.GameDTO;
+import com.fgc.framedata_api.dto.GameDTO;
 import com.fgc.framedata_api.repository.GameRepository;
+import com.fgc.framedata_api.request.CreateGameRequest;
+import com.fgc.framedata_api.request.UpdateGameRequest;
+import com.fgc.framedata_api.utils.CustomExceptions;
 import com.fgc.framedata_api.service.GameService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -31,21 +33,15 @@ class GameServiceTest {
     @Test
     void updateGame_shouldReturnEmpty_whenGameNotFound() {
         Long gameId = 1L;
-        GameDTO gameDTO = new GameDTO(
-                gameId,
-                "Updated Game",
-                null,
-                null,
-                null
-        );
-        gameDTO.setName("Updated Game");
+        UpdateGameRequest updateGameRequest = new UpdateGameRequest();
+        updateGameRequest.setName("Updated Game Name");
 
         when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
 
         try {
-            gameService.updateGame(gameId, gameDTO);
-        } catch (ResponseStatusException e) {
-            assert e.getStatusCode() == HttpStatus.NOT_FOUND;
+            gameService.updateGame(gameId, updateGameRequest);
+        } catch (CustomExceptions.GameNotFoundException e) {
+            assert e.getMessage().equals("Game not found with id: " + gameId);
         }
     }
 
@@ -57,8 +53,8 @@ class GameServiceTest {
 
         try {
             gameService.deleteGame(gameId);
-        } catch (ResponseStatusException e) {
-            assert e.getStatusCode() == HttpStatus.NOT_FOUND;
+        } catch (CustomExceptions.GameNotFoundException e) {
+            assert e.getMessage().equals("Game not found with id: " + gameId);
         }
     }
 
@@ -70,29 +66,24 @@ class GameServiceTest {
 
         try {
             gameService.getGameById(gameId);
-        } catch (ResponseStatusException e) {
-            assert e.getStatusCode() == HttpStatus.NOT_FOUND;
+        } catch (CustomExceptions.GameNotFoundException e) {
+            assert e.getMessage().equals("Game not found with id: " + gameId);
         }
     }
 
     @Test
     void addGame_shouldReturnGameDTO_whenGameIsAdded() {
-        GameDTO gameDTO = new GameDTO(
-                null,
-                "Test Game",
-                new ArrayList<>(),
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        CreateGameRequest createRequest = new CreateGameRequest();
+        createRequest.setName("Test Game");
 
         Game game = new Game();
-        game.setName(gameDTO.getName());
+        game.setName(createRequest.getName());
         game.setCreatedAt(LocalDateTime.now());
         game.setUpdatedAt(LocalDateTime.now());
 
         when(gameRepository.save(any(Game.class))).thenReturn(game);
 
-        GameDTO result = gameService.addGame(gameDTO);
+        GameDTO result = gameService.addGame(createRequest);
         assert result.getName().equals("Test Game");
     }
 }

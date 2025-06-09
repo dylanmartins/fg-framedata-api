@@ -1,4 +1,4 @@
-package com.fgc.framedata_api.model;
+package com.fgc.framedata_api.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

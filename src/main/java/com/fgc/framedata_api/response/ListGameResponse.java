@@ -1,15 +1,17 @@
-package com.fgc.framedata_api.model;
+package com.fgc.framedata_api.response;
+
+import com.fgc.framedata_api.dto.GameDTO;
 
 import java.util.List;
 
-public class GamesResponseDTO {
+public class ListGameResponse {
 
     private List<GameDTO> games;
 
-    public GamesResponseDTO() {
+    public ListGameResponse() {
     }
 
-    public GamesResponseDTO(List<GameDTO> games) {
+    public ListGameResponse(List<GameDTO> games) {
         this.games = games;
     }
 
