@@ -115,7 +115,6 @@ public class CharacterServiceTest {
         CharacterDTO characterDTO = characterService.addCharacter(createCharacterRequest);
         assert characterDTO != null;
         assert characterDTO.getName().equals("Test Character");
-        assert characterDTO.getGame().getId().equals(game.getId());
     };
 
     @Test

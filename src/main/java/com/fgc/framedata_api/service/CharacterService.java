@@ -69,15 +69,11 @@ public class CharacterService implements CharacterServiceInterface {
 
     private CharacterDTO mapToDTO(Character character) {
         CharacterDTO dto = new CharacterDTO();
-        GameDTO gameDTO = new GameDTO(
-                character.getGame().getId(),
-                character.getGame().getName(),
-                null,
-                character.getGame().getCreatedAt(),
-                character.getGame().getUpdatedAt()
-        );
+        dto.setId(character.getId());
         dto.setName(character.getName());
-        dto.setGame(gameDTO);
+        if (character.getGame() != null) {
+            dto.setGameName(character.getGame().getName());
+        }
         return dto;
     }
 }

@@ -11,6 +11,9 @@ public class GameDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public GameDTO() {
+    }
+
     public GameDTO(Long id, String name, List<CharacterDTO> characters, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;

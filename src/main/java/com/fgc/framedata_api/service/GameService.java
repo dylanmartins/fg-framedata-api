@@ -1,8 +1,10 @@
 package com.fgc.framedata_api.service;
 
+import com.fgc.framedata_api.dto.CharacterDTO;
 import com.fgc.framedata_api.model.Character;
 import com.fgc.framedata_api.model.Game;
 import com.fgc.framedata_api.dto.GameDTO;
+import com.fgc.framedata_api.repository.CharacterRepository;
 import com.fgc.framedata_api.repository.GameRepository;
 import com.fgc.framedata_api.request.CreateGameRequest;
 import com.fgc.framedata_api.request.UpdateGameRequest;
@@ -16,9 +18,11 @@ import java.util.stream.Collectors;
 public class GameService implements GameServiceInterface {
 
     private final GameRepository gameRepository;
+    private final CharacterRepository characterRepository;
 
-    public GameService(GameRepository gameRepository) {
+    public GameService(GameRepository gameRepository, CharacterRepository characterRepository) {
         this.gameRepository = gameRepository;
+        this.characterRepository = characterRepository;
     }
 
     public GameDTO addGame(CreateGameRequest createRequest) {
@@ -72,10 +76,27 @@ public class GameService implements GameServiceInterface {
     }
 
     private GameDTO mapToDTO(Game game) {
+        List<Character> characters = characterRepository.findAllByGameId(1L);
+        if (characters == null || characters.isEmpty()) {
+            return new GameDTO(
+                    game.getId(),
+                    game.getName(),
+                    Collections.emptyList(),
+                    game.getCreatedAt(),
+                    game.getUpdatedAt()
+            );
+        }
+
+        List<CharacterDTO> characterDTOs = characters.stream()
+                .map(character -> new CharacterDTO(
+                        character.getId(),
+                        character.getName()
+                ))
+                .collect(Collectors.toList());
         return new GameDTO(
                 game.getId(),
                 game.getName(),
-                new ArrayList<>(),
+                characterDTOs,
                 game.getCreatedAt(),
                 game.getUpdatedAt()
         );

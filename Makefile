@@ -1,3 +1,5 @@
+.PHONY: run clean stop test-local restart
+
 run:
 	docker-compose up -d --build
 
@@ -15,3 +17,10 @@ clean:
 
 stop:
 	docker-compose down
+
+test-local:
+	./mvnw clean test
+
+restart:
+	make stop
+	make run

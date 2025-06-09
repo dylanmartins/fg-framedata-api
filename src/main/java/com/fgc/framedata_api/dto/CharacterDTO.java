@@ -1,19 +1,27 @@
 package com.fgc.framedata_api.dto;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CharacterDTO {
 
     private Long id;
     private String name;
     private String gameName;
-    private GameDTO game;
 
     public CharacterDTO() {
     }
 
-    public CharacterDTO(Long id, String name, GameDTO game) {
+    public CharacterDTO(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.game = game;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -24,15 +32,11 @@ public class CharacterDTO {
         this.name = name;
     }
 
-    public GameDTO getGame() {
-        return game;
-    }
-
-    public void setGame(GameDTO game) {
-        this.game = game;
-    }
-
     public String getGameName() {
-        return game != null ? game.getName() : null;
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 }
