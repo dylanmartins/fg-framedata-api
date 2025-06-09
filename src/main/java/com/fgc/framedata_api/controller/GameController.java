@@ -1,7 +1,9 @@
 package com.fgc.framedata_api.controller;
 
-import com.fgc.framedata_api.model.GameDTO;
-import com.fgc.framedata_api.model.GamesResponseDTO;
+import com.fgc.framedata_api.dto.GameDTO;
+import com.fgc.framedata_api.request.CreateGameRequest;
+import com.fgc.framedata_api.request.UpdateGameRequest;
+import com.fgc.framedata_api.response.ListGameResponse;
 import com.fgc.framedata_api.repository.GameRepository;
 import com.fgc.framedata_api.service.GameService;
 import com.fgc.framedata_api.utils.CustomExceptions;
@@ -23,21 +25,21 @@ public class GameController {
     }
 
     @GetMapping
-    public GamesResponseDTO getAllGames() {
+    public ListGameResponse getAllGames() {
         List<GameDTO> gameDTOs = gameService.getAllGames();
-        return new GamesResponseDTO(gameDTOs);
+        return new ListGameResponse(gameDTOs);
     }
 
     @PostMapping
-    public ResponseEntity<GameDTO> addGame(@RequestBody GameDTO gameDTO) {
-        GameDTO createdGame = gameService.addGame(gameDTO);
+    public ResponseEntity<GameDTO> addGame(@RequestBody CreateGameRequest createGameRequest) {
+        GameDTO createdGame = gameService.addGame(createGameRequest);
         return ResponseEntity.status(201).body(createdGame);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GameDTO> updateGame(@PathVariable Long id, @RequestBody GameDTO gameDTO) {
+    public ResponseEntity<GameDTO> updateGame(@PathVariable Long id, @RequestBody UpdateGameRequest updateGameRequest) {
         try {
-            GameDTO game = gameService.updateGame(id, gameDTO);
+            GameDTO game = gameService.updateGame(id, updateGameRequest);
             return ResponseEntity.ok(game);
         } catch (CustomExceptions.GameNotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());

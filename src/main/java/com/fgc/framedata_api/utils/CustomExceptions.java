@@ -8,4 +8,9 @@ public class CustomExceptions {
         }
     }
 
+    public static class CharacterNotFoundException extends RuntimeException {
+        public CharacterNotFoundException(String message) {
+            super(message);
+        }
+    }
 }
