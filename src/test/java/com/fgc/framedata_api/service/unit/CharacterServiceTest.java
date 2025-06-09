@@ -6,8 +6,10 @@ import com.fgc.framedata_api.model.Game;
 import com.fgc.framedata_api.repository.CharacterRepository;
 import com.fgc.framedata_api.repository.GameRepository;
 import com.fgc.framedata_api.request.CreateCharacterRequest;
+import com.fgc.framedata_api.request.UpdateCharacterRequest;
 import com.fgc.framedata_api.service.CharacterService;
 import com.fgc.framedata_api.utils.CustomExceptions;
+import org.hibernate.sql.Update;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,6 +34,46 @@ public class CharacterServiceTest {
 
     @InjectMocks
     private CharacterService characterService;
+
+    @Test
+    void updateCharacter_shouldReturnNotFound_whenCharacterNotFound() {
+        Long characterId = 1L;
+        UpdateCharacterRequest updateCharacterRequest = new UpdateCharacterRequest();
+        updateCharacterRequest.setName("Updated Character");
+
+        // Simulate the scenario where the character is not found
+        when(characterRepository.findById(characterId)).thenReturn(Optional.empty());
+
+        try {
+            characterService.updateCharacter(characterId, updateCharacterRequest);
+        } catch (CustomExceptions.CharacterNotFoundException e) {
+            assert e.getMessage().equals("Character not found with id: " + characterId);
+        }
+    }
+
+    @Test
+    void updateCharacter_shouldReturnCharacterDTO_whenRequestIsValid() {
+        Long characterId = 1L;
+        UpdateCharacterRequest updateCharacterRequest = new UpdateCharacterRequest();
+        updateCharacterRequest.setName("Updated Character");
+
+        // Set up a character that will be returned by the service
+        Character existingCharacter = new Character();
+        existingCharacter.setId(characterId);
+        existingCharacter.setName("Old Character");
+        Game game = new Game();
+        game.setId(1L);
+        game.setName("Test Game");
+        existingCharacter.setGame(game);
+
+        // Mock the repository calls
+        when(characterRepository.findById(characterId)).thenReturn(Optional.of(existingCharacter));
+        when(characterRepository.save(any(Character.class))).thenReturn(existingCharacter);
+
+        CharacterDTO updatedCharacter = characterService.updateCharacter(characterId, updateCharacterRequest);
+        assert updatedCharacter != null;
+        assert updatedCharacter.getName().equals("Updated Character");
+    }
 
     @Test
     void addCharacter_shouldReturnNotFound_whenGameNotFound() {

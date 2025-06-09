@@ -10,6 +10,7 @@
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/repository/GameRepository.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/request/CreateCharacterRequest.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/request/CreateGameRequest.java
+/Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/request/UpdateCharacterRequest.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/request/UpdateGameRequest.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/response/ListCharacterResponse.java
 /Users/dylan.andrade/Projects/Study/fg-framedata-api/src/main/java/com/fgc/framedata_api/response/ListGameResponse.java

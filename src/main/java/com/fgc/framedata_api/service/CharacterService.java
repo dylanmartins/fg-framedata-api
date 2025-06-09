@@ -7,6 +7,7 @@ import com.fgc.framedata_api.dto.GameDTO;
 import com.fgc.framedata_api.repository.CharacterRepository;
 import com.fgc.framedata_api.repository.GameRepository;
 import com.fgc.framedata_api.request.CreateCharacterRequest;
+import com.fgc.framedata_api.request.UpdateCharacterRequest;
 import com.fgc.framedata_api.utils.CustomExceptions;
 import org.springframework.stereotype.Service;
 
@@ -42,22 +43,28 @@ public class CharacterService implements CharacterServiceInterface {
                 .toList();
     }
 
-    public Optional<CharacterDTO> getCharacterById(Long id) {
-        return characterRepository.findById(id).map(this::mapToDTO);
+    public CharacterDTO getCharacterById(Long id) {
+        Character existingCharacter = characterRepository.findById(id)
+                .orElseThrow(() -> new CustomExceptions.CharacterNotFoundException("Character not found with id: " + id));
+        return mapToDTO(existingCharacter);
     }
 
-    public Optional<CharacterDTO> updateCharacter(Long id, CharacterDTO characterDTO) {
-        return characterRepository.findById(id).map(existingGame -> {
-            if (characterDTO.getName() != null && !characterDTO.getName().isEmpty()) {
-                existingGame.setName(characterDTO.getName());
-            }
-            Character updated = characterRepository.save(existingGame);
-            return mapToDTO(updated);
-        });
+    public CharacterDTO updateCharacter(Long id, UpdateCharacterRequest updateCharacterRequest) {
+        Character existingCharacter = characterRepository.findById(id)
+                .orElseThrow(() -> new CustomExceptions.CharacterNotFoundException("Character not found with id: " + id));
+
+        if (updateCharacterRequest.getName() != null && !updateCharacterRequest.getName().isEmpty()) {
+            existingCharacter.setName(updateCharacterRequest.getName());
+        }
+        Character updatedCharacter = characterRepository.save(existingCharacter);
+        return mapToDTO(updatedCharacter);
     }
 
     public void deleteCharacter(Long id) {
-        characterRepository.deleteById(id);
+        Character existingCharacter = characterRepository.findById(id)
+                .orElseThrow(() -> new CustomExceptions.CharacterNotFoundException("Character not found with id: " + id));
+
+        gameRepository.deleteById(existingCharacter.getId());
     }
 
     private CharacterDTO mapToDTO(Character character) {
