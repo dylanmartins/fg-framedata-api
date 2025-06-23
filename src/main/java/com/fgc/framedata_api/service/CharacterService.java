@@ -1,31 +1,38 @@
 package com.fgc.framedata_api.service;
 
 import com.fgc.framedata_api.model.Character;
-import com.fgc.framedata_api.model.CharacterDTO;
+import com.fgc.framedata_api.dto.CharacterDTO;
 import com.fgc.framedata_api.model.Game;
-import com.fgc.framedata_api.model.GameDTO;
+import com.fgc.framedata_api.dto.GameDTO;
 import com.fgc.framedata_api.repository.CharacterRepository;
+import com.fgc.framedata_api.repository.GameRepository;
+import com.fgc.framedata_api.request.CreateCharacterRequest;
+import com.fgc.framedata_api.request.UpdateCharacterRequest;
+import com.fgc.framedata_api.utils.CustomExceptions;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CharacterService {
+public class CharacterService implements CharacterServiceInterface {
 
     private final CharacterRepository characterRepository;
+    private final GameRepository gameRepository;
 
-    public CharacterService(CharacterRepository characterRepository) {
+    public CharacterService(CharacterRepository characterRepository, GameRepository gameRepository) {
         this.characterRepository = characterRepository;
+        this.gameRepository = gameRepository;
     }
 
-    public CharacterDTO addCharacter(CharacterDTO characterDTO) {
+    public CharacterDTO addCharacter(CreateCharacterRequest createCharacterRequest) {
+        Long gameId = createCharacterRequest.getGameId();
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new CustomExceptions.GameNotFoundException("Game not found with id: " + gameId));
+
         Character character = new Character();
-        Game game = new Game();
-        // TODO: Fetch the game from the database using the ID from characterDTO
-        game.setName(characterDTO.getGame().getName());
         character.setGame(game);
-        character.setName(characterDTO.getName());
+        character.setName(createCharacterRequest.getName());
         character = characterRepository.save(character);
         return mapToDTO(character);
     }
@@ -36,35 +43,37 @@ public class CharacterService {
                 .toList();
     }
 
-    public Optional<CharacterDTO> getCharacterById(Long id) {
-        return characterRepository.findById(id).map(this::mapToDTO);
+    public CharacterDTO getCharacterById(Long id) {
+        Character existingCharacter = characterRepository.findById(id)
+                .orElseThrow(() -> new CustomExceptions.CharacterNotFoundException("Character not found with id: " + id));
+        return mapToDTO(existingCharacter);
     }
 
-    public Optional<CharacterDTO> updateCharacter(Long id, CharacterDTO characterDTO) {
-        return characterRepository.findById(id).map(existingGame -> {
-            if (characterDTO.getName() != null && !characterDTO.getName().isEmpty()) {
-                existingGame.setName(characterDTO.getName());
-            }
-            Character updated = characterRepository.save(existingGame);
-            return mapToDTO(updated);
-        });
+    public CharacterDTO updateCharacter(Long id, UpdateCharacterRequest updateCharacterRequest) {
+        Character existingCharacter = characterRepository.findById(id)
+                .orElseThrow(() -> new CustomExceptions.CharacterNotFoundException("Character not found with id: " + id));
+
+        if (updateCharacterRequest.getName() != null && !updateCharacterRequest.getName().isEmpty()) {
+            existingCharacter.setName(updateCharacterRequest.getName());
+        }
+        Character updatedCharacter = characterRepository.save(existingCharacter);
+        return mapToDTO(updatedCharacter);
     }
 
     public void deleteCharacter(Long id) {
-        characterRepository.deleteById(id);
+        Character existingCharacter = characterRepository.findById(id)
+                .orElseThrow(() -> new CustomExceptions.CharacterNotFoundException("Character not found with id: " + id));
+
+        gameRepository.deleteById(existingCharacter.getId());
     }
 
     private CharacterDTO mapToDTO(Character character) {
         CharacterDTO dto = new CharacterDTO();
-        GameDTO gameDTO = new GameDTO(
-                character.getGame().getId(),
-                character.getGame().getName(),
-                null,
-                character.getGame().getCreatedAt(),
-                character.getGame().getUpdatedAt()
-        );
+        dto.setId(character.getId());
         dto.setName(character.getName());
-        dto.setGame(gameDTO);
+        if (character.getGame() != null) {
+            dto.setGameName(character.getGame().getName());
+        }
         return dto;
     }
 }

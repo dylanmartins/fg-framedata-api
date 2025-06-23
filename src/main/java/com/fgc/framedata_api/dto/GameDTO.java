@@ -1,4 +1,4 @@
-package com.fgc.framedata_api.model;
+package com.fgc.framedata_api.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +10,9 @@ public class GameDTO {
     private List<CharacterDTO> characters;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public GameDTO() {
+    }
 
     public GameDTO(Long id, String name, List<CharacterDTO> characters, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
