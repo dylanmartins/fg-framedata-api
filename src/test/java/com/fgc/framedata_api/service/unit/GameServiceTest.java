@@ -82,6 +82,7 @@ class GameServiceTest {
         createRequest.setName("Test Game");
 
         Game game = new Game();
+        game.setId(1L);
         game.setName(createRequest.getName());
         game.setCreatedAt(LocalDateTime.now());
         game.setUpdatedAt(LocalDateTime.now());
