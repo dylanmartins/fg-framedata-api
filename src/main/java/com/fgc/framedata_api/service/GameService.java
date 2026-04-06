@@ -76,7 +76,7 @@ public class GameService implements GameServiceInterface {
     }
 
     private GameDTO mapToDTO(Game game) {
-        List<Character> characters = characterRepository.findAllByGameId(1L);
+        List<Character> characters = characterRepository.findAllByGameId(game.getId());
         if (characters == null || characters.isEmpty()) {
             return new GameDTO(
                     game.getId(),

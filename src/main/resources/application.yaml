@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/sf6
-    username: sf6user
-    password: sf6pass
+    url: jdbc:postgresql://sf6-db:5432/postgres
+    username: postgres
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: validate
