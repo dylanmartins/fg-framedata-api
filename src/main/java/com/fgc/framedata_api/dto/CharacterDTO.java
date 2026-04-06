@@ -7,6 +7,7 @@ public class CharacterDTO {
     private Long id;
     private String name;
     private String gameName;
+    private String patchVersion;
 
     public CharacterDTO() {
     }
@@ -38,5 +39,13 @@ public class CharacterDTO {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
+    }
+
+    public String getPatchVersion() {
+        return patchVersion;
+    }
+
+    public void setPatchVersion(String patchVersion) {
+        this.patchVersion = patchVersion;
     }
 }

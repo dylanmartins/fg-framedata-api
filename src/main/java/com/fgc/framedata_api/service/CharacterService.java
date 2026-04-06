@@ -33,6 +33,7 @@ public class CharacterService implements CharacterServiceInterface {
         Character character = new Character();
         character.setGame(game);
         character.setName(createCharacterRequest.getName());
+        character.setPatchVersion(createCharacterRequest.getPatchVersion());
         character = characterRepository.save(character);
         return mapToDTO(character);
     }
@@ -56,6 +57,9 @@ public class CharacterService implements CharacterServiceInterface {
         if (updateCharacterRequest.getName() != null && !updateCharacterRequest.getName().isEmpty()) {
             existingCharacter.setName(updateCharacterRequest.getName());
         }
+        if (updateCharacterRequest.getPatchVersion() != null) {
+            existingCharacter.setPatchVersion(updateCharacterRequest.getPatchVersion());
+        }
         Character updatedCharacter = characterRepository.save(existingCharacter);
         return mapToDTO(updatedCharacter);
     }
@@ -71,6 +75,7 @@ public class CharacterService implements CharacterServiceInterface {
         CharacterDTO dto = new CharacterDTO();
         dto.setId(character.getId());
         dto.setName(character.getName());
+        dto.setPatchVersion(character.getPatchVersion());
         if (character.getGame() != null) {
             dto.setGameName(character.getGame().getName());
         }

@@ -13,4 +13,10 @@ public class CustomExceptions {
             super(message);
         }
     }
+
+    public static class MoveNotFoundException extends RuntimeException {
+        public MoveNotFoundException(String message) {
+            super(message);
+        }
+    }
 }

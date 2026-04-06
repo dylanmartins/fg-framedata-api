@@ -16,6 +16,8 @@ public class Character {
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
+    private String patchVersion;
+
     public Long getId() {
         return id;
     }
@@ -38,5 +40,13 @@ public class Character {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public String getPatchVersion() {
+        return patchVersion;
+    }
+
+    public void setPatchVersion(String patchVersion) {
+        this.patchVersion = patchVersion;
     }
 }
