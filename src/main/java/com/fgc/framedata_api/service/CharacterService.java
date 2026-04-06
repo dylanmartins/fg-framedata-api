@@ -64,7 +64,7 @@ public class CharacterService implements CharacterServiceInterface {
         Character existingCharacter = characterRepository.findById(id)
                 .orElseThrow(() -> new CustomExceptions.CharacterNotFoundException("Character not found with id: " + id));
 
-        gameRepository.deleteById(existingCharacter.getId());
+        characterRepository.deleteById(existingCharacter.getId());
     }
 
     private CharacterDTO mapToDTO(Character character) {
