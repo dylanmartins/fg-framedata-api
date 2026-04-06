@@ -20,11 +20,11 @@ make restart
 make clean             # removes containers, image, and volumes
 ```
 
-Tests run against an in-memory H2 database (profile `test` is activated automatically via the surefire plugin).
+Tests run against an in-memory H2 database (profile `test` is activated automatically via the surefire plugin). Flyway is disabled in the test profile.
 
 ## Architecture
 
-Spring Boot 3.5 / Java 21 REST API for fighting game frame data. Uses PostgreSQL in production (Docker service `sf6-db`) and H2 for tests.
+Spring Boot 3.5 / Java 21 REST API for fighting game frame data. Uses PostgreSQL in production (Docker service `sf6-db`) and H2 for tests. Schema is managed by Flyway (`src/main/resources/db/migration/`).
 
 **Layered structure** under `src/main/java/com/fgc/framedata_api/`:
 
@@ -42,8 +42,3 @@ Spring Boot 3.5 / Java 21 REST API for fighting game frame data. Uses PostgreSQL
 **Test layout:**
 - `src/test/java/com/fgc/framedata_api/service/unit/` — unit tests with Mockito
 - `src/test/java/com/fgc/framedata_api/service/integration/` — `@SpringBootTest` + MockMvc integration tests
-
-## Known Issues
-
-- `GameService.mapToDTO()`: hardcoded `findAllByGameId(1L)` — should use `game.getId()`
-- `CharacterService.deleteCharacter()`: calls `gameRepository.deleteById()` instead of `characterRepository.deleteById()`

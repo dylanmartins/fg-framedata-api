@@ -10,5 +10,5 @@ CREATE TABLE moves (
     startup_frames INT,
     active_frames INT,
     recovery_frames INT,
-    frame_advantage INT,
+    frame_advantage INT
 );
